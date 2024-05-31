@@ -33,9 +33,9 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
     
     # Writes all points 
     for point in points:        
-        #lat = point[0]
-        #long = point[1]
-        #title = point[2]
+        #latitude = point[0]
+        #longitude = point[1]
+        #distance_elasped = point[2]
         
         placemark = ET.SubElement(document, "Placemark")
         ET.SubElement(placemark, "styleUrl").text = "#data+icon" # styleUrl; Applies changes defined in the Style element
