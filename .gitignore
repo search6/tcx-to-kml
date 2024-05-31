@@ -8,4 +8,7 @@
 /tcx_to_kml - Copy.py
 /THEY_DONT_KNOW_ME_SON.tcx
 /__pycache__
-/examples
+/tcx-test-files-main
+/example1.tcx
+/tcx-to-kml.py
+/.gitignore

@@ -1,8 +1,8 @@
 import os
 import sys
 import argparse
+from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
-from tcxreader.tcxreader import TCXReader
 
 # points = [(lat, long, title), (tuple2), ...]
 def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, output_directory="points.kml") -> None: 
@@ -33,8 +33,8 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
     
     # Writes all points 
     for point in points:        
-        #lat = point[0]
-        #long = point[1]
+        #lat = str(point[0])
+        #long = str(point[1])
         #title = point[2]
         
         placemark = ET.SubElement(document, "Placemark")
@@ -43,8 +43,8 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
 
         # LookAt
         look_at = ET.SubElement(placemark, "LookAt")
-        ET.SubElement(look_at, "latitude").text = points[0][0]
-        ET.SubElement(look_at, "longitude").text = points[0][1]
+        ET.SubElement(look_at, "latitude").text = str(points[0][0])
+        ET.SubElement(look_at, "longitude").text = str(points[0][1])
         ET.SubElement(look_at, "heading").text = "0"
         ET.SubElement(look_at, "tilt").text = "0"
         ET.SubElement(look_at, "range").text = "500"
@@ -54,7 +54,7 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
         Point = ET.SubElement(placemark, "Point")
         
         # why does kml make longitude first??
-        ET.SubElement(Point, "coordinates").text = f"{point[1]},{point[0]},0"
+        ET.SubElement(Point, "coordinates").text = f"{str(point[1])},{str(point[0])},0"
         
     tree = ET.ElementTree(root)
     ET.indent(tree, space="\t", level=0)
@@ -65,7 +65,6 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
             print(f"Points KML outputted at {output_directory}")
     else:
         tree.write(sys.stdout.buffer, "UTF-8", True)
-
 
 
 def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, output_directory="path.kml") -> None:
@@ -88,8 +87,8 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     
     # LookAt
     look_at = ET.SubElement(placemark, "LookAt")
-    ET.SubElement(look_at, "latitude").text = points[0][0]
-    ET.SubElement(look_at, "longitude").text = points[0][1]
+    ET.SubElement(look_at, "latitude").text = str(points[0][0])
+    ET.SubElement(look_at, "longitude").text = str(points[0][1])
     ET.SubElement(look_at, "heading").text = "0"
     ET.SubElement(look_at, "tilt").text = "0"
     ET.SubElement(look_at, "range").text = "500"
@@ -107,8 +106,9 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     for point in points:
         # lat = point[0]
         # long = point[1]
+        
         # Write longitude, latitude, altitude to the coordinates tag
-        coords.append(f"{point[1]},{point[0]},0 ") 
+        coords.append(f"{str(point[1])},{str(point[0])},0 ") 
     coordinates.text = "".join(coords)
     
     tree = ET.ElementTree(root)
@@ -121,48 +121,80 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     else:
         tree.write(sys.stdout.buffer, "UTF-8", True)
 
-
 def read_tcx_file(file_path, *, read_trackpoints=False, silent=False) -> None | list :
     try:
         # Checks if file is a .tcx file
         if file_ext != ".tcx":
             raise Exception("Exception: Invalid file extension")
-
-        tcx_reader = TCXReader()
-        data = tcx_reader.read(file_path)
-        
-        a_type = data.activity_type
-        a_date = str(data.end_time) + " UTC"
-        a_TotalTime = int(data.duration)
-        a_m, a_s = divmod(a_TotalTime, 60)
-        a_h, a_m = divmod(a_m, 60)
-        a_distance = data.distance
-        a_distance_miles = float(a_distance)/1609     
-        a_calories = data.calories
-        a_AvgHeartRate = data.hr_avg
-        a_MinHearRate = data.hr_min
-        a_MaxHeartRate = data.hr_max
-        
-        if not silent:
-            print(f"Activity Type: {a_type}", end="\n\n")
-            print(f"Start Date & Time: {a_date}")
-            print(f"Total Distance: {round(a_distance, 2)} meters ({round(a_distance_miles, 2)} miles)")
-            print(f"Time Elasped: {a_h} hours {a_m} minutes {a_s} seconds", end="\n\n")
-            print(f"Calories: {'No Calorie Data' if a_calories == 0 else a_calories}")
-            print(f"Heart Rate Info: \n\tAverage: {a_AvgHeartRate} BPM \n\tMinimum: {a_MinHearRate} BPM \n\tMaximum: {a_MaxHeartRate} BPM", end="\n\n")
- 
-        if read_trackpoints:
-            tkpoints = []
-            for tkp in data.trackpoints:
-                tkpoints.append((str(tkp.latitude), str(tkp.longitude), str(tkp.distance)))
-            return tkpoints
+    
+        with open(file_path, "rb") as file:
+            soup = BeautifulSoup(file, "xml")
             
-    except FileNotFoundError as err:
+            # Check if file has the Garmin XML schema and Activities element
+            # If not raise an Exception
+            if soup.TrainingCenterDatabase == None:
+                raise Exception("Exception: No TCX data in file")
+            elif soup.TrainingCenterDatabase.Activities == None:
+                raise Exception("Exception: File doesn't have <Activities> element")
+
+            activity = soup.TrainingCenterDatabase.Activities.Activity
+            activity_lap_details = activity.Lap
+            
+            if not silent:
+                # Gets activity type, date, and time from Activity.Id element
+                a_type = activity.attrs["Sport"]
+                a_date = activity.Id.text[:10]
+                a_time = activity.Id.text[11:-1] + "UTC"
+
+                # Calculates hours, minutes, and seconds from TotalTimeSeconds element in Activity.Lap
+                a_TotalTime = int(float(activity_lap_details.TotalTimeSeconds.text))
+                a_m, a_s = divmod(a_TotalTime, 60)
+                a_h, a_m = divmod(a_m, 60)
+
+                # Gets distance from DistanceMeters element and provides a mile conversion
+                a_distance = float(activity_lap_details.DistanceMeters.text)
+                a_distance_miles = float(a_distance)/1609
+                
+                # Gets calories from Calories element
+                # Prints as 'No Calorie Data' if no data
+                a_calories = float(activity_lap_details.Calories.text)
+
+                # Heart rate info from AverageHeartRateBpm and MaximumHeartRateBpm
+                # Prints as 'None BPM' if no data
+                a_AvgHeartRate = activity_lap_details.AverageHeartRateBpm
+                if a_AvgHeartRate is not None: a_AvgHeartRate = a_AvgHeartRate.Value.text
+                a_MaxHeartRate = activity_lap_details.MaximumHeartRateBpm
+                if a_MaxHeartRate is not None: a_MaxHeartRate = a_MaxHeartRate.Value.text
+
+                # Prints out all of the gathered information
+                print(f"Activity Type: {a_type}", end="\n\n")
+                print(f"Start Date & Time: {a_date} {a_time}")
+                print(f"Total Distance: {round(a_distance, 2)} meters ({round(a_distance_miles, 2)} miles)")
+                print(f"Time Elasped: {a_h} hours {a_m} minutes {a_s} seconds", end="\n\n")
+                print(f"Calories: {'No Calorie Data' if a_calories == 0 else a_calories}")
+                if a_type == "Biking": print(f"Average Cadence: {soup.TrainingCenterDatabase.Activities.Activity.Lap.Cadence.text} RPM")
+                print(f"Heart Rate Info: \n\tAverage: {a_AvgHeartRate} BPM\n\tMaximum: {a_MaxHeartRate} BPM")
+                print()
+
+            # Reads latitude, longitude, and elasped distance, and puts it into a list of tuples
+            if read_trackpoints:
+                activityGPSPoints = soup.find_all("Trackpoint")
+                tkpoints = []
+
+                for trackpoint in activityGPSPoints:
+                    tkpoints.append((
+                    trackpoint.Position.LatitudeDegrees.text,
+                    trackpoint.Position.LongitudeDegrees.text,
+                    trackpoint.DistanceMeters.text
+                    ))
+                
+                return tkpoints
+
+    except OSError as err:
         print(f"No such file or directory: '{err.filename}'")
     except Exception as err:
         print(err)
-
-
+        
 def write_kml_file(file_name, coordinates: list[tuple], *, output_point_kml=True, output_path_kml=True, output_folder):
     # write_point_kml & write_path_kml have the same args
     # - file name
@@ -172,8 +204,7 @@ def write_kml_file(file_name, coordinates: list[tuple], *, output_point_kml=True
     
     if output_point_kml: write_point_kml(file_name, coordinates, output_directory= os.path.join(output_folder, f"{file_name}_points.kml"))
     if output_path_kml: write_path_kml(file_name, coordinates, output_directory= os.path.join(output_folder, f"{file_name}_path.kml"))
-
-
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Convert to KML using TCX Trackpoint Position data")
     parser.add_argument("file_path", help="file to convert to KML")
@@ -188,6 +219,7 @@ if __name__ == '__main__':
     pgroup2.add_argument("-points", help="only writes points KML", action="store_false")
     
     args = parser.parse_args()
+
     file_name = os.path.splitext(os.path.split(args.file_path)[1])[0]
     _, file_ext = os.path.splitext(str(args.file_path))
 
@@ -199,5 +231,5 @@ if __name__ == '__main__':
         if not os.path.exists("output"):
             os.makedirs("output")
         if trackpoints is None:
-            raise Exception("program error")
+            raise SystemExit(1)
         else: write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_folder=args.o)
