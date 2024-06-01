@@ -195,6 +195,6 @@ if __name__ == '__main__':
         # Check if trackpoints is empty and write KML files
         if not args.r:
             if trackpoints is None:
-                raise Exception("File is empty or <Trackpoint> tag is empty")
+                raise Exception("<Trackpoint> tag is empty, nonexistent, or doesn't have longitude and latitude attributes")
             else: #args.path & args.points are booleans
                 write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_directory=output_directory)
