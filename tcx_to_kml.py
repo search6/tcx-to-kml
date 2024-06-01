@@ -26,7 +26,7 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
     
     # Icon; defines a image; must have a href element
     Icon = ET.SubElement(icon_style, "Icon")
-    ET.SubElement(Icon, "href").text = "https://upload.wikimedia.org/wikipedia/commons/c/c1/20x20square.png" # Icon link
+    ET.SubElement(Icon, "href").text = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUAQMAAAC3R49OAAAABlBMVEUAAAD///+l2Z/dAAAAEklEQVQImWNgAIL6/w+ogoEAAKI4Kp2NVIeDAAAAAElFTkSuQmCC" # Icon link
     
     # hotSpot; Offsets the position the icon
     ET.SubElement(icon_style, "hotSpot", {"x": "0.5", "y":"0.5", "xunits":"fraction", "yunits":"fraction"})
