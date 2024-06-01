@@ -105,8 +105,8 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     
     coords = []
     for point in points:
-        # lat = point[0]
-        # long = point[1]
+        # latitude = point[0]
+        # longitude = point[1]
         # Write longitude, latitude, altitude to the coordinates tag
         coords.append(f"{point[1]},{point[0]},0 ") 
     coordinates.text = "".join(coords)
@@ -177,21 +177,21 @@ def write_kml_file(file_name, coordinates: list[tuple], *, output_point_kml=True
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Convert to KML using TCX Trackpoint Position data")
     parser.add_argument("file_path", help="file to convert to KML")
-    parser.add_argument('-o', help="file output location, defaults to 'output'", default="output")
+    parser.add_argument('--o', help="file output location, defaults to 'output'", default="output")
     
     pg1 = parser.add_mutually_exclusive_group()
-    pg1.add_argument("-r", help="prints activity info, doesn't read/write track data", action="store_true")
-    pg1.add_argument("-s", help="silent mode; no activity related data will print", action="store_true")
+    pg1.add_argument("--r", help="prints activity info, doesn't read/write track data", action="store_true")
+    pg1.add_argument("--s", help="silent mode; no activity related data will print", action="store_true")
     
-    pgroup2 = parser.add_mutually_exclusive_group()
-    pgroup2.add_argument("-path", help="only writes path KML", action="store_false")
-    pgroup2.add_argument("-points", help="only writes points KML", action="store_false")
+    pg2 = parser.add_mutually_exclusive_group()
+    pg2.add_argument("--path", help="only writes path KML", action="store_false")
+    pg2.add_argument("--points", help="only writes points KML", action="store_false")
     
     args = parser.parse_args()
     file_name = os.path.splitext(os.path.split(args.file_path)[1])[0]
     _, file_ext = os.path.splitext(str(args.file_path))
 
-    # If trackpoints data isn't read, read_tcx_file doesn't return a value
+    # If trackpoints data isn't read, read_tcx_file doesn't returns None
     trackpoints: list[tuple] | None = read_tcx_file(args.file_path, read_trackpoints=(not args.r), silent=args.s)
  
     if not args.r:
