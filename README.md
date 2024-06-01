@@ -29,7 +29,8 @@ Points KML outputted at ~\output\running_activity_points.kml
 Path KML outputted at ~\output\running_activity_path.kml
 ~~~
 
-`tcx_to_kml.py` creates two files: `file_name_points.kml` & `file_name_path.kml`.
+`tcx_to_kml.py` reads the activity information in the file, and creates two files: `file_name_points.kml` & `file_name_path.kml`.
+General activity information can be ommitted with the `-s` flag.
 
 `running_activity_path.kml` is shown below with coordinates ommited.
 ~~~
@@ -53,9 +54,7 @@ Path KML outputted at ~\output\running_activity_path.kml
 				<altitudeMode>clampToGround</altitudeMode>
 			</LookAt>
 			<LineString>
-        			<coordinates>
-          				...
-				</coordinates>
+        			<coordinates> ... </coordinates>
 			</LineString>
 		</Placemark>
 	</Document>
