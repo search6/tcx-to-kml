@@ -43,8 +43,8 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
 
         # LookAt
         look_at = ET.SubElement(placemark, "LookAt")
-        ET.SubElement(look_at, "latitude").text = points[round((len(points)/2)-1)][0]
-        ET.SubElement(look_at, "longitude").text = points[round((len(points)/2)-1)][1]
+        ET.SubElement(look_at, "latitude").text = points[0][0]
+        ET.SubElement(look_at, "longitude").text = points[0][1]
         ET.SubElement(look_at, "heading").text = "0"
         ET.SubElement(look_at, "tilt").text = "0"
         ET.SubElement(look_at, "range").text = "1500"
@@ -88,8 +88,8 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     
     # LookAt
     look_at = ET.SubElement(placemark, "LookAt")
-    ET.SubElement(look_at, "latitude").text = points[round((len(points)/2)-1)][0]
-    ET.SubElement(look_at, "longitude").text = points[round((len(points)/2)-1)][1]
+    ET.SubElement(look_at, "latitude").text = points[0][0]
+    ET.SubElement(look_at, "longitude").text = points[0][1]
     ET.SubElement(look_at, "heading").text = "0"
     ET.SubElement(look_at, "tilt").text = "0"
     ET.SubElement(look_at, "range").text = "1500"
