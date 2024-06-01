@@ -1,5 +1,5 @@
 # TCX to KML
-This CLI tool uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and output KML files
+Command line interface that uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and convert them to KML files
 
 ## Requirement
 `tcxreader` is needed and can be installed through pip.
@@ -47,15 +47,15 @@ General activity information can be ommitted with the `-s` flag.
 		<Placemark>
 			<styleUrl>#lineStyle</styleUrl>
 			<LookAt>
-				<latitude>46.09344659373164</latitude>
-				<longitude>14.678033776581287</longitude>
+				<latitude>46.116950707510114</latitude>
+				<longitude>14.672594759613276</longitude>
 				<heading>0</heading>
 				<tilt>0</tilt>
-				<range>500</range>
+				<range>1500</range>
 				<altitudeMode>clampToGround</altitudeMode>
 			</LookAt>
 			<LineString>
-        			<coordinates> ... </coordinates>
+        			<coordinates>...</coordinates>
 			</LineString>
 		</Placemark>
 	</Document>
@@ -66,11 +66,10 @@ General activity information can be ommitted with the `-s` flag.
 ~~~
 tcx_to_kml.py [-h] [--o O] [--r | --s] [--path | --points] file_path
 
-options:
   -h, --help  show this help message and exit
-  --o O       file output location, defaults to 'output'
-  --r         prints activity info, doesn't read/write track data
-  --s         silent mode; no activity related data will print
-  --path      only writes path KML
-  --points    only writes points KML
+  -o O       file output location, defaults to 'output'
+  -r         prints activity info, doesn't read/write track data
+  -s         silent mode; no activity related data will print
+  -path      only writes path KML
+  -points    only writes points KML
 ~~~
