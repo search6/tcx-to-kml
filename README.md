@@ -9,8 +9,9 @@ pip install tcxreader
 ~~~
 
 ## Usage
+Using an example from the examples folder:
 ~~~
-py .\
+py .\tcx_to_kml.py 
 ~~~
 
 
