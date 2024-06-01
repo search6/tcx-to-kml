@@ -12,7 +12,8 @@ Using an example from the examples folder:
 ~~~
 py .\tcx_to_kml.py examples/running_activity.tcx
 ~~~
-Would result in two files being created: `running_activity_points.kml` & `running_activity_path.kml`
+Would result in two files being created: `running_activity_points.kml` & `running_activity_path.kml`.
+
 `running_activity_path.kml` is shown below with coordinate ommited.
 ~~~
 <?xml version='1.0' encoding='UTF-8'?>
