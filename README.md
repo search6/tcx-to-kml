@@ -4,7 +4,8 @@ This CLI tool uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the E
 
 ## Installation
 You can install `tcxreader` through pip
-~~~pip install tcxreader
+~~~
+pip install tcxreader
 ~~~
 
 
