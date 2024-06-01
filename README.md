@@ -2,12 +2,16 @@
 This CLI tool uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and output KML files
 
 
-## Installation
-You can install `tcxreader` through pip
+## Requirement
+`tcxreader` is needed and can be installed through pip.
 ~~~
 pip install tcxreader
 ~~~
 
+## Usage
+~~~
+py .\
+~~~
 
 
 
