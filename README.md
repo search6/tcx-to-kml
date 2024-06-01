@@ -11,10 +11,26 @@ pip install tcxreader
 Using an example from the examples folder:
 ~~~
 py .\tcx_to_kml.py examples/running_activity.tcx
-~~~
-Would result in two files being created: `running_activity_points.kml` & `running_activity_path.kml`.
 
-`running_activity_path.kml` is shown below with coordinate ommited.
+Activity Type: Running
+
+Start Date & Time: 2014-12-26 10:55:09 UTC
+Total Distance: 14332.28 meters (8.91 miles)
+Time Elasped: 0 hours 54 minutes 30 seconds
+
+Calories: 1182
+Heart Rate Info:
+        Average: 176.6602870813397 BPM
+        Minimum: 113 BPM
+        Maximum: 181 BPM
+
+Points KML outputted at ~
+Path KML outputted at C:\Users\Joel Lachapelle\Desktop\code folders\tcx to kml\tcx-test-files-main\examples\output\running_activity_1_path.kml
+
+~~~
+`tcx_to_kml.py` creates two files: `file_name_points.kml` & `file_name_path.kml`.
+
+`running_activity_path.kml` is shown below with coordinates ommited.
 ~~~
 <?xml version='1.0' encoding='UTF-8'?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
