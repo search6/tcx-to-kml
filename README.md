@@ -1,7 +1,7 @@
 # TCX to KML
-This CLI tool uses [tcxreader](https://github.com/alenrajsp/tcxreader) and `xml.etree.ElementTree` to read TCX files and output KML files
+This CLI tool uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and output KML files
 
-## Flag Options
+## Usage and Flags
 ~~~
 tcx_to_kml.py [-h] [--o O] [--r | --s] [--path | --points] file_path
 
@@ -13,3 +13,5 @@ options:
   --path      only writes path KML
   --points    only writes points KML
 ~~~
+
+
