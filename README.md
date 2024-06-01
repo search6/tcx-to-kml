@@ -24,10 +24,10 @@ Heart Rate Info:
         Minimum: 113 BPM
         Maximum: 181 BPM
 
-Points KML outputted at ~
-Path KML outputted at C:\Users\Joel Lachapelle\Desktop\code folders\tcx to kml\tcx-test-files-main\examples\output\running_activity_1_path.kml
-
+Points KML outputted at ~\output\running_activity_points.kml
+Path KML outputted at `output\running_activity_1_path.kml
 ~~~
+
 `tcx_to_kml.py` creates two files: `file_name_points.kml` & `file_name_path.kml`.
 
 `running_activity_path.kml` is shown below with coordinates ommited.
