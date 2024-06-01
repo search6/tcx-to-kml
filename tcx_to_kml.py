@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from tcxreader.tcxreader import TCXReader
 
 # points = [(lat, long, title), (tuple2), ...]
-def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, output_path="points.kml") -> None: 
+def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, output_path: str | Path = "points.kml") -> None: 
     root = ET.Element("kml", {"xmlns": "http://www.opengis.net/kml/2.2", "xmlns:gx": "http://www.google.com/kml/ext/2.2", "xmlns:kml": "http://www.opengis.net/kml/2.2", "xmlns:atom": "http://www.w3.org/2005/Atom"})
     
     # Document
@@ -67,8 +67,7 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
         tree.write(sys.stdout.buffer, "UTF-8", True)
 
 
-
-def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, output_path="path.kml") -> None:
+def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, output_path: str | Path = "path.kml") -> None:
     root = ET.Element("kml", {"xmlns": "http://www.opengis.net/kml/2.2", "xmlns:gx": "http://www.google.com/kml/ext/2.2", "xmlns:kml": "http://www.opengis.net/kml/2.2", "xmlns:atom": "http://www.w3.org/2005/Atom"})
     
     # Document
@@ -132,20 +131,19 @@ def read_tcx_file(file_path: str | Path, *, read_trackpoints=False, silent=False
         tcx_reader = TCXReader()
         data = tcx_reader.read(str(file_path))
         
-        a_type = data.activity_type
-        a_date = str(data.end_time) + " UTC"
-        a_TotalTime = int(data.duration)
-        a_m, a_s = divmod(a_TotalTime, 60)
-        a_h, a_m = divmod(a_m, 60)
-        a_distance = data.distance
-        a_distance_miles = float(a_distance)/1609     
-        a_calories = data.calories
-        a_AvgHeartRate = data.hr_avg
-        a_MinHearRate = data.hr_min
-        a_MaxHeartRate = data.hr_max
-        
-        
         if not silent:
+            a_type = data.activity_type
+            a_date = str(data.end_time) + " UTC"
+            a_TotalTime = int(data.duration)
+            a_m, a_s = divmod(a_TotalTime, 60)
+            a_h, a_m = divmod(a_m, 60)
+            a_distance = data.distance
+            a_distance_miles = float(a_distance)/1609     
+            a_calories = data.calories
+            a_AvgHeartRate = data.hr_avg
+            a_MinHearRate = data.hr_min
+            a_MaxHeartRate = data.hr_max
+        
             print(f"Activity Type: {a_type}", end="\n\n")
             print(f"Start Date & Time: {a_date}")
             print(f"Total Distance: {round(a_distance, 2)} meters ({round(a_distance_miles, 2)} miles)")
@@ -165,13 +163,12 @@ def read_tcx_file(file_path: str | Path, *, read_trackpoints=False, silent=False
         print(err)
 
 
-def write_kml_file(file_name, coordinates: list[tuple], *, output_point_kml=True, output_path_kml=True, output_directory):
+def write_kml_file(file_name: str, coordinates: list[tuple], *, output_point_kml=True, output_path_kml=True, output_directory: str | Path):
     # write_point_kml & write_path_kml have the same args
     # - file name
     # - list of tuples containing latitude, longitude, and title
     # - flag to print kml to console (defaults to False)
     # - output path for file (defaults to "output\file.kml")
-    
 
     if output_point_kml: write_point_kml(file_name, coordinates, output_path=Path.joinpath(output_directory,f"{file_name}_points.kml"))
     if output_path_kml: write_path_kml(file_name, coordinates, output_path=Path.joinpath(output_directory,f"{file_name}_path.kml"))
@@ -183,7 +180,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', help="file output location, defaults to 'output'", default="output")
     
     pg1 = parser.add_mutually_exclusive_group()
-    pg1.add_argument("-r", help="prints activity info, doesn't read/write track data", action="store_true")
+    pg1.add_argument("-r", help="read/prints activity info, doesn't read/write data", action="store_true")
     pg1.add_argument("-s", help="silent mode; no activity related data will print", action="store_true")
     
     pg2 = parser.add_mutually_exclusive_group()
@@ -208,4 +205,5 @@ if __name__ == '__main__':
         if not args.r:
             if trackpoints is None:
                 print("trackpoints is empty")
-            else: write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_directory=output_directory)
+            else: #args.path & args.points are booleans
+                write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_directory=output_directory)
