@@ -139,9 +139,9 @@ def read_tcx_file(file_path: Path, *, read_trackpoints=False, silent=False) -> N
             print(f"Activity Type: {data.activity_type}", end="\n\n")
             print(f"Start Date & Time: {str(data.end_time)} UTC")
             print(f"Total Distance: {(data.distance):.02f} meters ({distance_miles:.02f} miles)")
-            print(f"Time Elasped: {h} hours {m} minutes {s} seconds", end="\n\n")
+            print(f"Time Elasped: {int(h)} hours {int(m)} minutes {int(s)} seconds", end="\n\n")
             print(f"Calories: {'No Calorie Data' if data.calories == 0 else data.calories}")
-            print(f"Heart Rate Info: \n\tAverage: {data.hr_avg} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
+            print(f"Heart Rate Info: \n\tAverage: {round(data.hr_avg)} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
  
         if read_trackpoints:
             tkpoints = []
