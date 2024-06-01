@@ -91,7 +91,7 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     ET.SubElement(look_at, "longitude").text = points[0][1]
     ET.SubElement(look_at, "heading").text = "0"
     ET.SubElement(look_at, "tilt").text = "0"
-    ET.SubElement(look_at, "range").text = "1500"
+    ET.SubElement(look_at, "range").text = "2000"
     ET.SubElement(look_at, "altitudeMode").text = "clampToGround"
     
     # Line String
@@ -121,8 +121,7 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
         tree.write(sys.stdout.buffer, "UTF-8", True)
 
 
-def read_tcx_file(file_path: str | Path, *, read_trackpoints=False, silent=False) -> None | list[tuple] :
-    file_path = Path(file_path)
+def read_tcx_file(file_path: Path, *, read_trackpoints=False, silent=False) -> None | list[tuple] :
     try:
         # Checks if file is a .tcx file
         if file_path.suffix != ".tcx":
@@ -132,35 +131,27 @@ def read_tcx_file(file_path: str | Path, *, read_trackpoints=False, silent=False
         data = tcx_reader.read(str(file_path))
         
         if not silent:
-            a_type = data.activity_type
-            a_date = str(data.end_time) + " UTC"
-            a_TotalTime = int(data.duration)
-            a_m, a_s = divmod(a_TotalTime, 60)
-            a_h, a_m = divmod(a_m, 60)
-            a_distance = data.distance
-            a_distance_miles = float(a_distance)/1609     
-            a_calories = data.calories
-            a_AvgHeartRate = data.hr_avg
-            a_MinHearRate = data.hr_min
-            a_MaxHeartRate = data.hr_max
-        
-            print(f"Activity Type: {a_type}", end="\n\n")
-            print(f"Start Date & Time: {a_date}")
-            print(f"Total Distance: {round(a_distance, 2)} meters ({round(a_distance_miles, 2)} miles)")
-            print(f"Time Elasped: {a_h} hours {a_m} minutes {a_s} seconds", end="\n\n")
-            print(f"Calories: {'No Calorie Data' if a_calories == 0 else a_calories}")
-            print(f"Heart Rate Info: \n\tAverage: {a_AvgHeartRate} BPM \n\tMinimum: {a_MinHearRate} BPM \n\tMaximum: {a_MaxHeartRate} BPM", end="\n\n")
+            elasped_time = data.duration
+            m, s = divmod(elasped_time, 60)
+            h, m = divmod(m, 60)
+            distance_miles = float(data.distance)/1609     
+
+            print(f"Activity Type: {data.activity_type}", end="\n\n")
+            print(f"Start Date & Time: {str(data.end_time)} UTC")
+            print(f"Total Distance: {(data.distance):.02f} meters ({distance_miles:.02f} miles)")
+            print(f"Time Elasped: {h} hours {m} minutes {s} seconds", end="\n\n")
+            print(f"Calories: {'No Calorie Data' if data.calories == 0 else data.calories}")
+            print(f"Heart Rate Info: \n\tAverage: {data.hr_avg} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
  
         if read_trackpoints:
             tkpoints = []
             for tkp in data.trackpoints:
                 tkpoints.append((str(tkp.latitude), str(tkp.longitude), str(tkp.distance)))
             return tkpoints
-            
+        
     except FileNotFoundError as err:
         print(f"No such file or directory: '{err.filename}'")
-    except Exception as err:
-        print(err)
+    except Exception as err: print(err)
 
 
 def write_kml_file(file_name: str, coordinates: list[tuple], *, output_point_kml=True, output_path_kml=True, output_directory: str | Path):
@@ -204,6 +195,6 @@ if __name__ == '__main__':
         # Check if trackpoints is empty and write KML files
         if not args.r:
             if trackpoints is None:
-                print("trackpoints is empty")
+                raise Exception("File is empty or <Trackpoint> tag is empty")
             else: #args.path & args.points are booleans
                 write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_directory=output_directory)
