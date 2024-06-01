@@ -11,7 +11,8 @@ pip install tcxreader
 Using an example from the examples folder:
 ~~~
 py .\tcx_to_kml.py examples/running_activity.tcx
-
+~~~
+~~~
 Activity Type: Running
 
 Start Date & Time: 2014-12-26 10:55:09 UTC
@@ -25,7 +26,7 @@ Heart Rate Info:
         Maximum: 181 BPM
 
 Points KML outputted at ~\output\running_activity_points.kml
-Path KML outputted at `output\running_activity_1_path.kml
+Path KML outputted at ~\output\running_activity_path.kml
 ~~~
 
 `tcx_to_kml.py` creates two files: `file_name_points.kml` & `file_name_path.kml`.
