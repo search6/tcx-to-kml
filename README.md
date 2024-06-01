@@ -34,7 +34,7 @@ Path KML outputted at ~\output\running_activity_path.kml
 General activity information can be ommitted with the `-s` flag.
 
 `running_activity_path.kml` is shown below with coordinates ommited.
-~~~
+~~~kml
 <?xml version='1.0' encoding='UTF-8'?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 	<Document>
