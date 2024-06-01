@@ -47,15 +47,15 @@ General activity information can be ommitted with the `-s` flag.
 		<Placemark>
 			<styleUrl>#lineStyle</styleUrl>
 			<LookAt>
-				<latitude>46.09344659373164</latitude>
-				<longitude>14.678033776581287</longitude>
+				<latitude>46.116950707510114</latitude>
+				<longitude>14.672594759613276</longitude>
 				<heading>0</heading>
 				<tilt>0</tilt>
-				<range>500</range>
+				<range>1500</range>
 				<altitudeMode>clampToGround</altitudeMode>
 			</LookAt>
 			<LineString>
-        			<coordinates> ... </coordinates>
+        			<coordinates>...</coordinates>
 			</LineString>
 		</Placemark>
 	</Document>
