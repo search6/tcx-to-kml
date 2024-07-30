@@ -21,7 +21,7 @@ Time Elasped: 0 hours 54 minutes 30 seconds
 
 Calories: 1182
 Heart Rate Info:
-        Average: 176.6602870813397 BPM
+        Average: 176.66 BPM
         Minimum: 113 BPM
         Maximum: 181 BPM
 
