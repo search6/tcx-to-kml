@@ -8,6 +8,22 @@ pip install tcxreader
 ~~~
 
 ## Usage
+~~~
+tcx_to_kml.py [-h] [-o O] [-r | -s] [-path | -points] file_path
+
+positional arguments:
+  file_path   file to convert to KML
+
+flags:
+  -h, --help  show this help message and exit
+  -o O        file output location, defaults to 'output'
+  -r          read/prints activity info, doesn't read/write data
+  -s          silent mode; no activity related data will print
+  -path       only writes path KML
+  -points     only writes points KML
+~~~
+
+## Example
 Using an example from the examples folder:
 ~~~
 py .\tcx_to_kml.py examples\running_activity.tcx
@@ -60,16 +76,4 @@ General activity information can be ommitted with the `-s` flag.
 		</Placemark>
 	</Document>
 </kml>
-~~~
-
-## Flags
-~~~
-tcx_to_kml.py [-h] [--o O] [--r | --s] [--path | --points] file_path
-
-  -h, --help  show this help message and exit
-  -o O       file output location, defaults to 'output'
-  -r         prints activity info, doesn't read/write Trackpoint data
-  -s         silent mode; no activity related data will print
-  -path      only writes path KML
-  -points    only writes points KML
 ~~~
