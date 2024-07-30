@@ -33,9 +33,9 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
     
     # Writes all points 
     for point in points:        
-        #latitude = point[0]
-        #longitude = point[1]
-        #distance_elasped = point[2]
+        # latitude = point[0]
+        # longitude = point[1]
+        # distance_elasped = point[2]
         
         placemark = ET.SubElement(document, "Placemark")
         ET.SubElement(placemark, "styleUrl").text = "#data+icon" # styleUrl; Applies changes defined in the Style element
@@ -53,12 +53,14 @@ def write_point_kml(output_name: str, points: list[tuple], *, print_kml=False, o
         # Point
         Point = ET.SubElement(placemark, "Point")
         
-        # why does kml make longitude first??
+        # why does KML make longitude first??
         ET.SubElement(Point, "coordinates").text = f"{point[1]},{point[0]},0"
         
     tree = ET.ElementTree(root)
     ET.indent(tree, space="\t", level=0)
     
+    
+    # Write KML to file
     if not print_kml:
         with open(str(output_path), 'wb') as file:
             tree.write(file, "UTF-8", True)
@@ -97,7 +99,6 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     # Line String
     line_string = ET.SubElement(placemark, "LineString")
     coordinates = ET.SubElement(line_string, "coordinates")
-    coordinates.text = ""
     
     # confusing for no reason whatsoever
     # https://developers.google.com/kml/documentation/kmlreference#linestring:~:text=%3Ccoordinates%3E...%3C/coordinates%3E%20%20%20%20%20%20%20%20%20%20%20%20%3C!%2D%2D%20lon%2Clat%5B%2Calt%5D%20%2D%2D%3E
@@ -106,7 +107,7 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
     for point in points:
         # latitude = point[0]
         # longitude = point[1]
-        # Write longitude, latitude, altitude to the coordinates tag
+        # Write longitude, latitude, altitude to the <coordinates> tag
         coords.append(f"{point[1]},{point[0]},0 ")
     coordinates.text = "".join(coords) 
     
@@ -121,7 +122,7 @@ def write_path_kml(output_name: str, points: list[tuple], *, print_kml=False, ou
         tree.write(sys.stdout.buffer, "UTF-8", True)
 
 
-def read_tcx_file(file_path: Path, *, read_trackpoints=False, silent=False) -> None | list[tuple] :
+def read_tcx_file(file_path: Path, *, read_trackpoints=True, silent=False) -> None | list[tuple] :
     try:
         # Checks if file is a .tcx file
         if file_path.suffix != ".tcx":
@@ -141,7 +142,7 @@ def read_tcx_file(file_path: Path, *, read_trackpoints=False, silent=False) -> N
             print(f"Total Distance: {(data.distance):.02f} meters ({distance_miles:.02f} miles)")
             print(f"Time Elasped: {int(h)} hours {int(m)} minutes {int(s)} seconds", end="\n\n")
             print(f"Calories: {'No Calorie Data' if data.calories == 0 else data.calories}")
-            print(f"Heart Rate Info: \n\tAverage: {round(data.hr_avg)} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
+            if data.hr_avg is not None: print(f"Heart Rate Info: \n\tAverage: {round(data.hr_avg)} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
  
         if read_trackpoints:
             tkpoints = []
@@ -189,12 +190,12 @@ if __name__ == '__main__':
     # Check if file exists
     if input_file_path.exists():
 
-        # Read trackpoints; if data isn't read, read_tcx_file doesn't returns None
+        # Read trackpoints; if data isn't read, read_tcx_file returns None
         trackpoints: list[tuple] | None = read_tcx_file(input_file_path, read_trackpoints=(not args.r), silent=args.s) 
  
         # Check if trackpoints is empty and write KML files
         if not args.r:
             if trackpoints is None:
                 raise Exception("<Trackpoint> tag is empty, nonexistent, or doesn't have longitude and latitude attributes")
-            else: #args.path & args.points are booleans
+            else:
                 write_kml_file(file_name, trackpoints, output_point_kml=args.path, output_path_kml=args.points, output_directory=output_directory)
