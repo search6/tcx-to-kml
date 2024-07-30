@@ -142,7 +142,7 @@ def read_tcx_file(file_path: Path, *, read_trackpoints=True, silent=False) -> No
             print(f"Total Distance: {(data.distance):.02f} meters ({distance_miles:.02f} miles)")
             print(f"Time Elasped: {int(h)} hours {int(m)} minutes {int(s)} seconds", end="\n\n")
             print(f"Calories: {'No Calorie Data' if data.calories == 0 else data.calories}")
-            if data.hr_avg is not None: print(f"Heart Rate Info: \n\tAverage: {round(data.hr_avg)} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
+            if data.hr_avg is not None: print(f"Heart Rate Info: \n\tAverage: {round(data.hr_avg, 2)} BPM \n\tMinimum: {data.hr_min} BPM \n\tMaximum: {data.hr_max} BPM", end="\n\n")
  
         if read_trackpoints:
             tkpoints = []
