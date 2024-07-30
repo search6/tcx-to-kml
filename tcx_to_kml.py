@@ -172,7 +172,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', help="file output location, defaults to 'output'", default="output")
     
     pg1 = parser.add_mutually_exclusive_group()
-    pg1.add_argument("-r", help="read/prints activity info, doesn't read/write data", action="store_true")
+    pg1.add_argument("-r", help="read/prints activity info, doesn't read/write Trackpoint data", action="store_true")
     pg1.add_argument("-s", help="silent mode; no activity related data will print", action="store_true")
     
     pg2 = parser.add_mutually_exclusive_group()
