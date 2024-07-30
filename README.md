@@ -1,8 +1,8 @@
 # TCX to KML
 Command line interface that uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and convert them to KML files
 
-## Requirement
-`tcxreader` is needed and can be installed through pip.
+## Dependency
+`tcxreader` is needed and can be installed through the command line.
 ~~~
 pip install tcxreader
 ~~~
