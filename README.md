@@ -2,25 +2,27 @@
 Command line interface tool that uses [tcxreader](https://github.com/alenrajsp/tcxreader) and the ElementTree XML API to read TCX files and convert them to KML files
 
 ## Dependency
-`tcxreader` is needed and can be installed through the command line.
+`tcxreader` is needed and can be installed through pip.
 ~~~
 pip install tcxreader
 ~~~
 
 ## Usage
 ~~~
-tcx_to_kml.py [-h] [-o O] [-r | -s] [-path | -points] file_path
+usage: tcx_to_kml.py [-h] [-o O] [-v] [--path | --points] [--no_write] file_path
+
+Convert TCX to KML using Trackpoint data
 
 positional arguments:
-  file_path   file to convert to KML
+  file_path   .tcx file to convert to .kml
 
 flags:
   -h, --help  show this help message and exit
-  -o O        file output location, defaults to 'output'
-  -r          read/prints activity info, doesn't read/write data
-  -s          silent mode; no activity related data will print
-  -path       only writes path KML
-  -points     only writes points KML
+  -o O        file output location, defaults to 'output' folder
+  -v          verbose; activity related data will print
+  --path      only writes path KML
+  --points    only writes points KML
+  --no_write  does not write any KML files
 ~~~
 
 ## Example
@@ -37,17 +39,17 @@ Time Elasped: 0 hours 54 minutes 30 seconds
 
 Calories: 1182
 Heart Rate Info:
-        Average: 176.66 BPM
-        Minimum: 113 BPM
-        Maximum: 181 BPM
+    Average: 176.66 BPM
+    Minimum: 113 BPM
+    Maximum: 181 BPM
 
-Points KML outputted at ~\output\running_activity_points.kml
-Path KML outputted at ~\output\running_activity_path.kml
+Points KML outputted at '~\output\running_activity_points.kml'
+Path KML outputted at '~\output\running_activity_path.kml'
 ~~~
 
 
 `tcx_to_kml.py` reads the activity information in the file, and creates two files: `file_name_points.kml` & `file_name_path.kml`.
-General activity information can be ommitted with the `-s` flag.
+General activity information can be printed with the `-v` flag.
 
 `running_activity_path.kml` is shown below. Coordinates are ommited for the sake of readability.
 ~~~kml
