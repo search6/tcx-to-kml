@@ -28,7 +28,7 @@ flags:
 ## Example
 Using an example from the examples folder:
 ~~~
-py .\tcx_to_kml.py examples\running_activity.tcx
+py .\tcx_to_kml.py examples\running_activity.tcx -v
 ~~~
 ~~~
 Activity Type: Running
