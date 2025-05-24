@@ -1,14 +1,12 @@
-import os
 import argparse
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from tcxreader.tcxreader import TCXReader, TCXTrackPoint, TCXExercise
 
-# points = [(lat, long, title), (tuple2), ...]
 def write_point_kml(output_name: str, points: list[TCXTrackPoint], output_path: str | Path) -> None:
     """Writes a point KML file using TCXTrackPoint data from tcxreader"""
 
-    root = ET.Element("kml", {"xmlns": "http://www.opengis.net/kml/2.2", "xmlns:gx": "http://www.google.com/kml/ext/2.2", "xmlns:kml": "http://www.opengis.net/kml/2.2", "xmlns:atom": "http://www.w3.org/2005/Atom"})
+    root = ET.Element("kml", {"xmlns":"http://www.opengis.net/kml/2.2", "xmlns:gx":"http://www.google.com/kml/ext/2.2", "xmlns:kml":"http://www.opengis.net/kml/2.2", "xmlns:atom":"http://www.w3.org/2005/Atom"})
 
     # Document
     document = ET.SubElement(root,"Document")
@@ -113,7 +111,6 @@ def write_path_kml(output_name: str, points: list[TCXTrackPoint], output_path: s
         coords.append(f"{point.longitude},{point.latitude},0 ")
     coordinates.text = "".join(coords)
 
-
     tree = ET.ElementTree(root)
     ET.indent(tree, space="\t", level=0)
 
@@ -150,16 +147,16 @@ def read_tcx_file(file_path: Path, *, print_activity_info=False) -> list[TCXTrac
 
 
 if __name__ == '__main__':
+    # Parse program arguments
     parser = argparse.ArgumentParser(description="Convert TCX to KML using Trackpoint data")
     parser.add_argument("file_path", help=".tcx file to convert to .kml")
     parser.add_argument('-o', help="file output location, defaults to 'output' folder", default="output")
     parser.add_argument("-v", help="verbose; activity related data will print", action="store_true")
+    parser.add_argument("--no_write", help="does not write any KML files", action="store_true")
 
     pg = parser.add_mutually_exclusive_group()
     pg.add_argument("--path", help="only writes path KML", action="store_false")
     pg.add_argument("--points", help="only writes points KML", action="store_false")
-
-    parser.add_argument("--no_write", help="does not write any KML files", action="store_true")
 
     args = parser.parse_args()
 
@@ -175,13 +172,13 @@ if __name__ == '__main__':
     if not input_file_path.is_file() or input_file_path.suffix != ".tcx":
         raise TypeError("Invalid path or file extension")
 
-    if not output_directory.exists():
-        os.mkdir(output_directory)
+    # Make output directory if it does not exist
+    output_directory.mkdir(parents= True, exist_ok=True)
 
     # Read trackpoints
     trackpoints: list[TCXTrackPoint] = read_tcx_file(input_file_path, print_activity_info=args.v)
 
-    # Write KML file
+    # Create KML file
     output_path_points = Path.joinpath(output_directory,f"{file_name}_points.kml")
     output_path_path = Path.joinpath(output_directory,f"{file_name}_path.kml")
 
