@@ -51,7 +51,7 @@ Path KML outputted at '~\output\running_activity_path.kml'
 `tcx_to_kml.py` reads the activity information in the file, and creates two files: `file_name_points.kml` & `file_name_path.kml`.
 General activity information can be printed with the `-v` flag.
 
-`running_activity_path.kml` is shown below. Coordinates are ommited for the sake of readability.
+`running_activity_path.kml` is shown below.
 ~~~kml
 <?xml version='1.0' encoding='UTF-8'?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
